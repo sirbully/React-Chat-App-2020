@@ -9,7 +9,7 @@ const Messages = ({ messages, name }) => (
   <ScrollToBottom>
     {messages.map((message, idx) => (
       <div key={idx}>
-        <Message message={(message, name)} />
+        <Message message={message} name={name} />
       </div>
     ))}
   </ScrollToBottom>
