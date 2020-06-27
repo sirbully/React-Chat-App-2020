@@ -5,7 +5,8 @@ import './Join.css';
 
 const Join = () => {
   const [name, setName] = useState('');
-  const [room, setRoom] = useState('');
+  // const [room, setRoom] = useState('');
+  const room = 'The Cheap Chatroom';
 
   return (
     <div className='joinOuterContainer'>
@@ -20,12 +21,12 @@ const Join = () => {
           />
         </div>
         <div>
-          <input
+          {/* <input
             placeholder='Room'
             className='joinInput mt-20'
             type='text'
             onChange={({ target }) => setRoom(target.value)}
-          />
+          /> */}
         </div>
         <Link
           onClick={event => (!name || !room) && event.preventDefault()}
