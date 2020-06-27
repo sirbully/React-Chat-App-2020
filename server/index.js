@@ -13,8 +13,6 @@ const io = socketio(server);
 app.use(router);
 
 io.on('connect', socket => {
-  console.log('We have a new connection');
-
   socket.on('join', ({ name, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, name, room });
 
@@ -26,9 +24,15 @@ io.on('connect', socket => {
       user: 'admin',
       text: `Welcome to ${user.room}, ${user.name}!`,
     });
+
     socket.broadcast.to(user.room).emit('message', {
       user: 'admin',
       text: `${user.name} has joined the chat`,
+    });
+
+    io.to(user.room).emit('roomData', {
+      room: user.room,
+      users: getUsersInRoom(user.room),
     });
 
     callback();
@@ -43,7 +47,19 @@ io.on('connect', socket => {
   });
 
   socket.on('disconnect', () => {
-    console.log('User left');
+    const user = removeUser(socket.id);
+
+    if (user) {
+      io.to(user.room).emit('message', {
+        user: user.name,
+        text: `${user.name} has left the chat`,
+      });
+
+      io.to(user.room).emit('roomData', {
+        room: user.room,
+        users: getUsersInRoom(user.room),
+      });
+    }
   });
 });
 
